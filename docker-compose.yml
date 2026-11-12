@@ -1,0 +1,86 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# SIMS — full local stack (4 containers, 2 segmented networks)
+#
+#   ┌────────────┐  frontend-net   ┌────────────┐  backend-net   ┌─────────────┐
+#   │  frontend  │ ──────────────▶ │    api     │ ─────────────▶ │  sqlserver  │
+#   │ (nginx SPA)│                 │ (.NET API) │ ─────────────▶ │    redis    │
+#   └────────────┘                 └────────────┘                └─────────────┘
+#
+#   • frontend reaches only the api          (frontend-net)
+#   • api reaches sqlserver + redis          (backend-net)
+#   • sqlserver & redis are NOT exposed to the host → reduced attack surface
+#
+#   Start:  docker compose up --build
+#   UI:     http://localhost:8080        Swagger: http://localhost:5080/swagger
+# ══════════════════════════════════════════════════════════════════════════════
+
+services:
+
+  frontend:
+    build: ./src/frontend
+    container_name: sims-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    networks:
+      - frontend-net
+    restart: unless-stopped
+
+  api:
+    build: ./src/backend/Sims.Backend
+    container_name: sims-api
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=SimsDb;User Id=sa;Password=${SA_PASSWORD:-Adm1234!};TrustServerCertificate=True;MultipleActiveResultSets=true"
+      Redis: "redis:6379"
+    ports:
+      - "5080:8080"          # Swagger / direct API access (optional, for the demo)
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - frontend-net          # reachable by the frontend
+      - backend-net           # reaches sqlserver + redis
+    restart: unless-stopped
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sims-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SA_PASSWORD:-Adm1234!}"
+      MSSQL_PID: "Developer"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - backend-net
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$${MSSQL_SA_PASSWORD}\" -No -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: sims-redis
+    command: ["redis-server", "--save", "60", "1", "--appendonly", "no"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend-net
+    restart: unless-stopped
+
+networks:
+  frontend-net:
+    driver: bridge
+  backend-net:
+    driver: bridge
+
+volumes:
+  sqlserver-data:
+  redis-data:

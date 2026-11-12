@@ -67,8 +67,8 @@ namespace Sims.Backend.Migrations
                 columns: new[] { "Id", "CreatedAt", "Email", "IsActive", "PasswordHash", "Role", "Username" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin@sims.local", true, "$2a$12$ePUMBLnGPXv0N9i6FmCPA.AjdDCd1zZN6OdZsEOJrKRJPWW.pTWCe", "Admin", "admin" },
-                    { 2, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "analyst@sims.local", true, "$2a$12$mHsNXFVn1cz9Lm2mXr6cKOr/JlmAVxNmJu3fXsf/7eOPFnPbcPpWC", "User", "analyst" }
+                    { 1, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin@sims.local", true, "$2a$12$HHUciHqOx0wK3/ec8rHqpu.X1zZaVRUZyZdtP5vGRMd5.bEKp.riy", "Admin", "admin" },
+                    { 2, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "analyst@sims.local", true, "$2a$12$Sg7Ky6dWwpaHZNNhS3T5QOTu1I1tzCBvnZ8/qHGeevp/x/zVMgYXa", "User", "analyst" }
                 });
 
             migrationBuilder.CreateIndex(

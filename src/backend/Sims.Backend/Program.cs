@@ -5,7 +5,10 @@ using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o =>
+        // Enums als Klartext ("Open", "High", "Admin") statt Zahlen (de)serialisieren
+        o.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -46,7 +49,14 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger"; // → http://localhost:8080/swagger
 });
 
-app.UseHttpsRedirection();
+// Im Container wird nur HTTP (Port 8080) bereitgestellt – Redirect würde sonst ins Leere laufen
+if (!string.Equals(
+        Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"),
+        "true", StringComparison.OrdinalIgnoreCase))
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();

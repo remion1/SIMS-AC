@@ -1,0 +1,35 @@
+# ───────────────────────────────── .NET / build output ─────────────────────────────────
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.DotSettings.user
+
+# Build & publish artifacts
+publish/
+artifacts/
+*.dll
+*.pdb
+
+# ───────────────────────────────── Node / frontend ─────────────────────────────────
+node_modules/
+dist/
+npm-debug.log*
+yarn-error.log*
+
+# ───────────────────────────────── Environment / secrets ─────────────────────────────────
+.env
+.env.*
+!.env.example
+appsettings.*.Local.json
+
+# ───────────────────────────────── SAST / tooling output ─────────────────────────────────
+semgrep-report.json
+semgrep-report.sarif
+
+# ───────────────────────────────── OS / editor ─────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+.idea/

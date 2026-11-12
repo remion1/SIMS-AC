@@ -122,7 +122,7 @@ public sealed class SimsDbContext(DbContextOptions<SimsDbContext> options) : DbC
                     Id           = 1,
                     Username     = "admin",
                     Email        = "admin@sims.local",
-                    PasswordHash = "$2a$12$ePUMBLnGPXv0N9i6FmCPA.AjdDCd1zZN6OdZsEOJrKRJPWW.pTWCe",
+                    PasswordHash = "$2a$12$HHUciHqOx0wK3/ec8rHqpu.X1zZaVRUZyZdtP5vGRMd5.bEKp.riy",
                     Role         = UserRole.Admin,
                     IsActive     = true,
                     CreatedAt    = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc)
@@ -132,7 +132,7 @@ public sealed class SimsDbContext(DbContextOptions<SimsDbContext> options) : DbC
                     Id           = 2,
                     Username     = "analyst",
                     Email        = "analyst@sims.local",
-                    PasswordHash = "$2a$12$mHsNXFVn1cz9Lm2mXr6cKOr/JlmAVxNmJu3fXsf/7eOPFnPbcPpWC",
+                    PasswordHash = "$2a$12$Sg7Ky6dWwpaHZNNhS3T5QOTu1I1tzCBvnZ8/qHGeevp/x/zVMgYXa",
                     Role         = UserRole.User,
                     IsActive     = true,
                     CreatedAt    = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc)
