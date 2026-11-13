@@ -85,8 +85,6 @@ no manual `dotnet ef` commands needed.
 | `admin`  | `Admin1234!`  | Admin |
 | `analyst`| `Analyst1234!`| User  |
 
-> ⚠️ Change these before any non-demo deployment.
-
 ---
 
 ## 🧰 System requirements
